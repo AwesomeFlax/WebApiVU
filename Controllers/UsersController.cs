@@ -69,7 +69,7 @@ namespace WebApiVU.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]UserDto userDto)
+        public ActionResult<User> Register([FromBody]UserDto userDto)
         {
             // map dto to entity
             var user = _mapper.Map<User>(userDto);
@@ -77,8 +77,8 @@ namespace WebApiVU.Controllers
             try
             {
                 // save 
-                _userService.Create(user, userDto.Password);
-                return Ok();
+                var result = _userService.Create(user, userDto.Password);
+                return Ok(result);
             }
             catch (AppException ex)
             {
