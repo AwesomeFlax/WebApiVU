@@ -14,5 +14,6 @@ namespace WebApiVU.Helpers
         public DbSet<User> Users { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<Classes> Classes { get; set; }
-    }
+        public DbSet<Mark> Marks { get; set; }
+	}
 }

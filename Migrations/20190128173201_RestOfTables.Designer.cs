@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiVU.Helpers;
 
 namespace WebApiVU.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190128173201_RestOfTables")]
+    partial class RestOfTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,37 +34,6 @@ namespace WebApiVU.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Classes");
-                });
-
-            modelBuilder.Entity("WebApiVU.Models.Mark", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Atempt");
-
-                    b.Property<int?>("ClassId");
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<double>("Result");
-
-                    b.Property<int>("Semester");
-
-                    b.Property<int?>("StudentId");
-
-                    b.Property<int?>("TeacherId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Marks");
                 });
 
             modelBuilder.Entity("WebApiVU.Models.Schedule", b =>
@@ -115,21 +86,6 @@ namespace WebApiVU.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WebApiVU.Models.Mark", b =>
-                {
-                    b.HasOne("WebApiVU.Models.Classes", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId");
-
-                    b.HasOne("WebApiVU.Models.User", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("WebApiVU.Models.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("WebApiVU.Models.Schedule", b =>
