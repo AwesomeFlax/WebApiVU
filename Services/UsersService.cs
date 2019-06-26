@@ -120,7 +120,6 @@ namespace WebApiVU.Services
         }
 
         // private helper methods
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");

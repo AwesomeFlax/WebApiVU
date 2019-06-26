@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiVU.Helpers;
 
 namespace WebApiVU.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190625200550_Recipes")]
+    partial class Recipes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,13 +42,9 @@ namespace WebApiVU.Migrations
 
                     b.Property<string>("CuisineName");
 
-                    b.Property<int?>("RecipeAuthorId");
-
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeAuthorId");
 
                     b.ToTable("Recipes");
                 });
@@ -101,24 +99,21 @@ namespace WebApiVU.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Group");
+
                     b.Property<string>("LastName");
 
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<byte[]>("PasswordSalt");
 
+                    b.Property<int>("Status");
+
                     b.Property<string>("Username");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WebApiVU.Models.Recipe", b =>
-                {
-                    b.HasOne("WebApiVU.Models.User", "RecipeAuthor")
-                        .WithMany()
-                        .HasForeignKey("RecipeAuthorId");
                 });
 
             modelBuilder.Entity("WebApiVU.Models.RecipeProduct", b =>

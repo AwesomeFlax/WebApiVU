@@ -12,8 +12,10 @@ namespace WebApiVU.Helpers
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Schedule> Schedule { get; set; }
-        public DbSet<Classes> Classes { get; set; }
-        public DbSet<Mark> Marks { get; set; }
-	}
+
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<RecipeProduct> RecipeProducts { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<RecipeStep> RecipeSteps { get; set; }
+    }
 }

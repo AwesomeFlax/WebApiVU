@@ -10,8 +10,8 @@ using WebApiVU.Helpers;
 namespace WebApiVU.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190128173311_RestOfTables_1")]
-    partial class RestOfTables_1
+    [Migration("20190625201348_RecipeAuthor")]
+    partial class RecipeAuthor
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,75 +21,76 @@ namespace WebApiVU.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebApiVU.Models.Classes", b =>
+            modelBuilder.Entity("WebApiVU.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("WebApiVU.Models.Recipe", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CuisineName");
+
+                    b.Property<int?>("RecipeAuthorId");
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("Type");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Classes");
+                    b.HasIndex("RecipeAuthorId");
+
+                    b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("WebApiVU.Models.Mark", b =>
+            modelBuilder.Entity("WebApiVU.Models.RecipeProduct", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Atempt");
+                    b.Property<long?>("ProductId");
 
-                    b.Property<int?>("ClassId");
+                    b.Property<int>("Quantity");
 
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<double>("Result");
-
-                    b.Property<int>("Semester");
-
-                    b.Property<int?>("StudentId");
-
-                    b.Property<int?>("TeacherId");
+                    b.Property<long?>("RecipeId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("RecipeId");
 
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Marks");
+                    b.ToTable("RecipeProducts");
                 });
 
-            modelBuilder.Entity("WebApiVU.Models.Schedule", b =>
+            modelBuilder.Entity("WebApiVU.Models.RecipeStep", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ClassBegin");
+                    b.Property<string>("Description");
 
-                    b.Property<DateTime>("ClassEnd");
+                    b.Property<long?>("RecipeId");
 
-                    b.Property<int?>("ClassId");
-
-                    b.Property<string>("Group");
-
-                    b.Property<int?>("TeacherId");
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("RecipeId");
 
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Schedule");
+                    b.ToTable("RecipeSteps");
                 });
 
             modelBuilder.Entity("WebApiVU.Models.User", b =>
@@ -119,30 +120,29 @@ namespace WebApiVU.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("WebApiVU.Models.Mark", b =>
+            modelBuilder.Entity("WebApiVU.Models.Recipe", b =>
                 {
-                    b.HasOne("WebApiVU.Models.Classes", "Class")
+                    b.HasOne("WebApiVU.Models.User", "RecipeAuthor")
                         .WithMany()
-                        .HasForeignKey("ClassId");
-
-                    b.HasOne("WebApiVU.Models.User", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("WebApiVU.Models.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
+                        .HasForeignKey("RecipeAuthorId");
                 });
 
-            modelBuilder.Entity("WebApiVU.Models.Schedule", b =>
+            modelBuilder.Entity("WebApiVU.Models.RecipeProduct", b =>
                 {
-                    b.HasOne("WebApiVU.Models.Classes", "Class")
+                    b.HasOne("WebApiVU.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ProductId");
 
-                    b.HasOne("WebApiVU.Models.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
+                    b.HasOne("WebApiVU.Models.Recipe")
+                        .WithMany("RequiredProducts")
+                        .HasForeignKey("RecipeId");
+                });
+
+            modelBuilder.Entity("WebApiVU.Models.RecipeStep", b =>
+                {
+                    b.HasOne("WebApiVU.Models.Recipe")
+                        .WithMany("Steps")
+                        .HasForeignKey("RecipeId");
                 });
 #pragma warning restore 612, 618
         }

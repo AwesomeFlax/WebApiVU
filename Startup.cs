@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApiVU.Services;
 using AutoMapper;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApiVU
 {
@@ -82,8 +83,30 @@ namespace WebApiVU
                 };
             });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1", 
+                    Title = "Recipe API",
+                    Description = "ASP.NET Core 2.2 Recipe Web API"
+                });
+            });
+
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+
+            var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(p => p.GetName().Name == "WebApiVU")
+                .FirstOrDefault();
+
+            if (assembly != null)
+            {
+                assembly.GetTypes()
+                    .Where(p => p.Name.EndsWith("Service") && !p.Name.StartsWith("IUser"))
+                    .ToList()
+                    .ForEach(p => services.AddTransient(p));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,6 +125,12 @@ namespace WebApiVU
             app.UseAuthentication();
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
+            });
         }
     }
 }
